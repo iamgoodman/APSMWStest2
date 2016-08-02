@@ -62,10 +62,11 @@ public class GetReportSample {
          * http://aws.amazon.com
          ***********************************************************************/
     	final String accessKeyId = "**";
-        final String secretAccessKey = "**";
+        final String secretAccessKey = "***";
 
         final String appName = "Myawesomeapp";
         final String appVersion = "1.1.0";
+
 
         MarketplaceWebServiceConfig config = new MarketplaceWebServiceConfig();
 
@@ -116,14 +117,14 @@ public class GetReportSample {
          * Marketplace and Merchant IDs are required parameters for all 
          * Marketplace Web Service calls.
          ***********************************************************************/
-        final String merchantId = "**";
-        final String sellerDevAuthToken = "**";
+        final String merchantId = "***";
+        final String sellerDevAuthToken = "***";
 
         GetReportRequest request = new GetReportRequest();
         request.setMerchant( merchantId );
         request.setMWSAuthToken(sellerDevAuthToken);
 
-        request.setReportId( "**" );
+        request.setReportId( "2494659306017015" );
 
         // Note that depending on the type of report being downloaded, a report can reach 
         // sizes greater than 1GB. For this reason we recommend that you _always_ program to
@@ -132,7 +133,7 @@ public class GetReportSample {
         //
          OutputStream report ;
          
-	    report = new FileOutputStream( "Y:\\Staffs\\Joey\\Inventory.xls" );
+	    report = new FileOutputStream( "Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\Order.xls" );
 		
          request.setReportOutputStream( report );
 

@@ -75,6 +75,10 @@ public class RequestReportRequest {
     public RequestReportRequest() {
         super();
     }
+    
+    
+    
+
 
     /**
      * Value constructor

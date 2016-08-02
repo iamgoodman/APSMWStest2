@@ -47,8 +47,8 @@ public class GetReportRequestListSample {
          * Access Key ID and Secret Access Key ID, obtained from:
          * http://aws.amazon.com
          ***********************************************************************/
-        final String accessKeyId = "**";
-        final String secretAccessKey = "**";
+    	final String accessKeyId = "***";
+        final String secretAccessKey = "***";
 
         final String appName = "Myawesomeapp";
         final String appVersion = "1.1.0";
@@ -114,8 +114,8 @@ public class GetReportRequestListSample {
          * Marketplace and Merchant IDs are required parameters for all 
          * Marketplace Web Service calls.
          ***********************************************************************/
-        final String merchantId = "**";
-        final String sellerDevAuthToken = "**";
+        final String merchantId = "***";
+        final String sellerDevAuthToken = "****";
 
         GetReportRequestListRequest request = new GetReportRequestListRequest();
         request.setMerchant( merchantId );
@@ -123,8 +123,10 @@ public class GetReportRequestListSample {
         
         
         //add to list 
-	    IdList n = new IdList();	    
-	    n.withId("**");
+	    IdList n = new IdList();
+	    //add reportrequest id
+	    
+	    n.withId("240709017015");
         request.setReportRequestIdList(n);
        
         //

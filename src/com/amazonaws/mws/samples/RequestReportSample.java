@@ -19,7 +19,10 @@
 
 package com.amazonaws.mws.samples;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -43,18 +46,21 @@ public class RequestReportSample {
      * Request Report functionality
      *
      * @param args unused
+     * @throws ParseException 
+     * @throws DatatypeConfigurationException 
      */
-    public static void main(String... args) {
+    public static void main(String... args) throws ParseException, DatatypeConfigurationException {
         
         /************************************************************************
          * Access Key ID and Secret Access Key ID, obtained from:
          * http://aws.amazon.com
          ***********************************************************************/
-    	final String accessKeyId = "**";
-        final String secretAccessKey = "**";
-
+    	final String accessKeyId = "***";
+        final String secretAccessKey = "***";
+ 
         final String appName = "Myawesomeapp";
         final String appVersion = "1.1.0";
+ 
 
 
         MarketplaceWebServiceConfig config = new MarketplaceWebServiceConfig();
@@ -118,24 +124,49 @@ public class RequestReportSample {
          * Marketplace and Merchant IDs are required parameters for all 
          * Marketplace Web Service calls.
          ***********************************************************************/
-        final String merchantId = "**";
-        final String sellerDevAuthToken = "**";
+        final String merchantId = "****";
+        final String sellerDevAuthToken = "****";
         // marketplaces from which data should be included in the report; look at the
         // API reference document on the MWS website to see which marketplaces are
         // included if you do not specify the list yourself
         final IdList marketplaces = new IdList(Arrays.asList(
-        		"**"));
+        		"***"));
+
+       
+      //date format is yyyy-mm-dd
+        String createdAfter = "2016-08-02";
+
+        XMLGregorianCalendar mwsDateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(createdAfter);
         
+        
+ /*       //Do not set end date , end date will be defaulted on the requested date
+        String createdAfter1 = "2016-08-02";
+
+        XMLGregorianCalendar mwsDateTime1 = DatatypeFactory.newInstance().newXMLGregorianCalendar(createdAfter1);*/
+        
+
+       
         RequestReportRequest request = new RequestReportRequest()
-		        .withMerchant(merchantId)
+        		.withMerchant(merchantId)
 		        .withMarketplaceIdList(marketplaces)
-		        // Inventory Report: _GET_FLAT_FILE_OPEN_LISTINGS_DATA_
-		        // Live Listing Report _GET_MERCHANT_LISTINGS_DATA_
-		        .withReportType("_GET_FLAT_FILE_OPEN_LISTINGS_DATA_")
-		        .withReportOptions("ShowSalesChannel=true");
-        request = request.withMWSAuthToken(sellerDevAuthToken);
+		        .withReportOptions("ShowSalesChannel=true")
+		        //_GET_MERCHANT_LISTINGS_DATA_ all isting
+		        //_GET_MERCHANT_LISTINGS_DATA_LITE q>0
+		        // _GET_MERCHANT_LISTINGS_DATA_LITER_ q>0 only sku and quantity 
+		        //_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_ get orders
+        		.withReportType("_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_")
+        		//set end date start date has been set in the bottom 
+        		/*.withEndDate(mwsDateTime1)*/
+                .withStartDate(mwsDateTime);
+   
+        System.out.println(request.getStartDate());
+    
         
-        // demonstrates how to set the date range
+        
+
+     
+        
+   /*     // demonstrates how to set the date range, start date has been set in here. Voided found another one to set
 		DatatypeFactory df = null;
 		try {
 			df = DatatypeFactory.newInstance();
@@ -144,8 +175,9 @@ public class RequestReportSample {
 			throw new RuntimeException(e);
 		}
 		XMLGregorianCalendar startDate = df
-				.newXMLGregorianCalendar(new GregorianCalendar(2011, 1, 1));
-		request.setStartDate(startDate);
+				.newXMLGregorianCalendar(new GregorianCalendar(2016, 8, 1));
+		
+		request.setStartDate(startDate);*/
 		
 	    // @TODO: set additional request parameters here
 		
