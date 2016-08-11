@@ -16,5 +16,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/Git/APSMWStest2/third-party/poi-ooxml-3.5-beta5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/Git/APSMWStest2/third-party/poi-3.9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/Git/APSMWStest2/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/Git/APSMWStest2/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

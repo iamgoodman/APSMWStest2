@@ -155,7 +155,7 @@ public class RequestReportSample {
 		        // _GET_MERCHANT_LISTINGS_DATA_LITER_ q>0 only sku and quantity 
 		        //_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_ get orders
         		.withReportType("_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_")
-        		//set end date start date has been set in the bottom 
+        		//Do not need to set end date, default end date is the date when you submit the request
         		/*.withEndDate(mwsDateTime1)*/
                 .withStartDate(mwsDateTime);
    
