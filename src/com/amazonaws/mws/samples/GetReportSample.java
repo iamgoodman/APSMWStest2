@@ -20,6 +20,8 @@
 package com.amazonaws.mws.samples;
 
 import java.util.List;
+import com.mysql.jdbc.Driver;
+
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
