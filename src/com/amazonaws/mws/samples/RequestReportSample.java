@@ -55,8 +55,8 @@ public class RequestReportSample {
          * Access Key ID and Secret Access Key ID, obtained from:
          * http://aws.amazon.com
          ***********************************************************************/
-    	final String accessKeyId = "***";
-        final String secretAccessKey = "***";
+    	final String accessKeyId = "000";
+        final String secretAccessKey = "0000";
  
         final String appName = "Myawesomeapp";
         final String appVersion = "1.1.0";
@@ -124,13 +124,13 @@ public class RequestReportSample {
          * Marketplace and Merchant IDs are required parameters for all 
          * Marketplace Web Service calls.
          ***********************************************************************/
-        final String merchantId = "****";
-        final String sellerDevAuthToken = "****";
+        final String merchantId = "0000";
+        final String sellerDevAuthToken = "000";
         // marketplaces from which data should be included in the report; look at the
         // API reference document on the MWS website to see which marketplaces are
         // included if you do not specify the list yourself
         final IdList marketplaces = new IdList(Arrays.asList(
-        		"***"));
+        		"0000"));
 
        
       //date format is yyyy-mm-dd
@@ -154,7 +154,9 @@ public class RequestReportSample {
 		        //_GET_MERCHANT_LISTINGS_DATA_LITE q>0
 		        // _GET_MERCHANT_LISTINGS_DATA_LITER_ q>0 only sku and quantity 
 		        //_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_ get orders
-        		.withReportType("_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_")
+		        //_GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_
+		        //_GET_FLAT_FILE_ALL_ORDERS_DATA_BY_ORDER_DATE_
+        		.withReportType("_GET_XML_ALL_ORDERS_DATA_BY_ORDER_DATE_")
         		//Do not need to set end date, default end date is the date when you submit the request
         		/*.withEndDate(mwsDateTime1)*/
                 .withStartDate(mwsDateTime);

@@ -20,15 +20,18 @@
 package com.amazonaws.mws.samples;
 
 import java.util.List;
-import com.mysql.jdbc.Driver;
+
 
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.soap.Node;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -36,19 +39,24 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -56,6 +64,7 @@ import java.sql.Statement;
 
 import com.amazonaws.mws.*;
 import com.amazonaws.mws.model.*;
+
 import com.mysql.jdbc.Driver;
 import com.mysql.jdbc.PreparedStatement;
 import com.amazonaws.mws.mock.MarketplaceWebServiceMock;
@@ -87,7 +96,7 @@ public class GetReportSample {
          * http://aws.amazon.com
          ***********************************************************************/
     	final String accessKeyId = "****";
-        final String secretAccessKey = "*****";
+        final String secretAccessKey = "****";
 
         final String appName = "Myawesomeapp";
         final String appVersion = "1.1.0";
@@ -143,13 +152,13 @@ public class GetReportSample {
          * Marketplace Web Service calls.
          ***********************************************************************/
         final String merchantId = "****";
-        final String sellerDevAuthToken = "****";
+        final String sellerDevAuthToken =  "****";
 
         GetReportRequest request = new GetReportRequest();
         request.setMerchant( merchantId );
         request.setMWSAuthToken(sellerDevAuthToken);
 
-        request.setReportId( "2494659306017015" );
+        request.setReportId( "2600845429017028" );
 
         // Note that depending on the type of report being downloaded, a report can reach 
         // sizes greater than 1GB. For this reason we recommend that you _always_ program to
@@ -158,21 +167,299 @@ public class GetReportSample {
         //
          OutputStream report ;
          
-	    report = new FileOutputStream( "Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\Order.xls" );
+	    report = new FileOutputStream( "Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\Orderready.xml" );
 		
          request.setReportOutputStream( report );
           
         invokeGetReport(service, request);
        
         
+        //use DOM to parse XML, write amazon order id, Asin, sku, product name to DB
+        
+        try {	
+        	
+        	//Initialize new Obj to add retrieved data to DB each time it is being retreived 
+        	Amazonorders orders = new Amazonorders(sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken, null, sellerDevAuthToken, sellerDevAuthToken, sellerDevAuthToken);
+           
+            //Does not work, input is a string, only takes afile 
+              File inputFile = new File("Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\Orderready.xml");
+        
+            
+            DocumentBuilderFactory dbFactory 
+            
+               = DocumentBuilderFactory.newInstance();
+            
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            
+            org.w3c.dom.Document doc = dBuilder.parse(inputFile);
+            
+            doc.getDocumentElement().normalize();
+            
+            System.out.println("Root element :" 
+               + doc.getDocumentElement().getNodeName());
+            
+            NodeList nList = doc.getElementsByTagName("Order");
+            
+            System.out.println("----------------------------");
+            
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+            	
+               org.w3c.dom.Node nNode = nList.item(temp);
+               
+               System.out.println("\nCurrent Element :" 
+            		   
+                  + nNode.getNodeName());
+               
+               if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+            	   
+            	   /*System.out.println("im Here");*/
+            	   
+                /* 
+                 //**Critical Error, Node can not be cast to type element
+                  Node eElement = (Element) nNode;*/
+                  
+            	   org.w3c.dom.Node eElement =  nNode;
+                 
+                  
+                  /*System.out.println("Im inside of an order");*/
+                  
+                  System.out.println("AmazonOrderId : " 
+                		  
+                     + ((org.w3c.dom.Element) eElement)
+                     
+                     .getElementsByTagName("AmazonOrderID")
+                     .item(0)
+                     .getTextContent());
+                  
+                  
+                  
+             
+                  //set order id to orders obj
+                  orders.setAmazonorderid(
+                		  ((org.w3c.dom.Element) eElement) 
+                     .getElementsByTagName("AmazonOrderID")
+                     .item(0)
+                     .getTextContent());
+                  
+                  
         
         
-      //sax parser to parser the outputed xml report
+                  //set Asin to orders 
+                  try{     
+                	  
+                	  
+                     System.out.println("here");
+                     
+                     
+                     
+                 
+                     
+                     
+                      String as = (((org.w3c.dom.Element) eElement) 
+                      .getElementsByTagName("ASIN")
+                      .item(0)
+                      .getTextContent());
+                      
+                      
+                      
+                      orders.setAsin(
+                        		 as);
+                      
+                      
+                      System.out.println(orders.getAsin());
+                      System.out.println("Did u see?");
+                  }
+                  catch(NullPointerException e){
+                      
+                
+                     
+                     	 
+                     	 System.out.println("Canceled Order");
+                     	 
+                     	 orders.setAsin(
+                            		 "");
+                         	 
+                     	 
+                    
+                      
+                      
+                  };
+                  
+                   
+                       
+             
+                    //set sku   
+                   try{
+                  
+                       String sku = (((org.w3c.dom.Element) eElement) 
+                               .getElementsByTagName("SKU")
+                               .item(0)
+                               .getTextContent());
+                       
+                       
+                       orders.setSku(sku);
+                       
+                       
+                   }
+                      
+                      catch (NullPointerException e)
+                       {
+                      	 
+                      	 orders.setSku(
+                             		 "" );
+                          	 
+                      	 
+                       }
+                    
+                       
+                     
+                     
+                     
+                       //set ProductName
+                       
+                       try{
+                     	  
+                       String pr = (((org.w3c.dom.Element) eElement) 
+                               .getElementsByTagName("ProductName")
+                               .item(0)
+                               .getTextContent());
+                       
+                       
+                 	  orders.setProductname(pr);
+                       
+                       
+                       }
+                       catch(NullPointerException e)
+                       {
+                     	
+                                   
+                     
+                     	  
+                     	  orders.setProductname(
+                         		"" );
+                     	  
+                     	  
+                       }
+                       
+                       
+                       
+                       
+                       
+                       //write to db
+                       
+                       String url = "000";
+                       String username = "000";
+                       String password = "000";
+                       
+                       System.out.println("Loading driver...");
+                       try {
+                           Class.forName("com.mysql.jdbc.Driver");
+                           System.out.println("Driver loaded!");
+                       } catch (ClassNotFoundException e) {
+                           throw new IllegalStateException("Cannot find the driver in the classpath!", e);
+                       }
+                       
+                       
+                       
+                       System.out.println("Connecting database...");
+                       
+                       try (Connection connection = DriverManager.getConnection(url, username, password)) {
+                       	
+                       	
+                           System.out.println("Database connected!");
+                           
+                           
+                           
+                           //When first used this program Amazon Order ids are not avaiable, Insert all order ids to db first, for testing purposes, amazon order id already exists.
+             
+                          
+                          
+                       /*    String query = " insert into AmazonOrders (OrderNumbers)"
+                                   + " values (?)";
+                           
+                           
+                           PreparedStatement preparedStmt = (PreparedStatement) connection.prepareStatement(query);
+                           preparedStmt.setString (1, orders.getAmazonorderid());
+                           
+                        // execute the preparedstatement
+                           preparedStmt.execute();
+                           System.out.println("inserted");*/
+                           
+                           
+                           
+                           
+                           	
+                           
+                           // Update DB
+                           String query = "UPDATE AmazonOrders SET SKU = ?, ASIN = ?, ProductName = ? "
+                           		
+                           		+ " WHERE OrderNumbers = ?";
+                             
+                           
+                           
+                           //create the mysql insert preparedstatement
+                           
+                           PreparedStatement preparedStmt = (PreparedStatement) connection.prepareStatement(query);
+                          
+                           //insert values to be updated to statement 
+                           
+                           preparedStmt.setString(1,orders.getSku());
+                           
+                           preparedStmt.setString(2,orders.getAsin());
+                           
+                           preparedStmt.setString(3,orders.getProductname());
+                           
+                           preparedStmt.setString(4,orders.getAmazonorderid());
+                           
+                      
+                           System.out.println(query);
+                           
+                        // execute the preparedstatement
+                           preparedStmt.execute();
+                           System.out.println("Updated");
+                           
+                           
+                           
+                           //after inserting, close the connection
+                           connection.close();
+                           
+                       } catch (SQLException e) {
+                           throw new IllegalStateException("Cannot connect the database!", e);
+                       }
+                       
+                       
+                       
+                       
+                       
+                       
+                    }
+                 }
+              } catch (Exception e) {
+             	 
+             	 System.out.println("here is the canceled Order");
+             	 
+
+                 e.printStackTrace();
+                 
+                 
+                 
+                 
+                 
+                 
+              }
+        
+        
+        
+        
+
+        
+        
+    /*  //sax parser to parser the outputed xml report
         
      //fetch amazon order id and write it to DB
         
     	 // Location of the source file
-        String sourceFilePath = "Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\order report.xls";
+        String sourceFilePath = "Y:\\Staffs\\Joey\\Developer\\JoeyAdvisor\\order report.txt";
         
         
   	   
@@ -222,7 +509,7 @@ public class GetReportSample {
            	 
            	String a = (excelData.get(i).toString().split(",")[0]);
            	
-           /*	System.out.println(a.substring(1, a.length()));*/
+           	System.out.println(a.substring(1, a.length()));
            	
            	str.add(a.substring(1, a.length()));
            	 
@@ -330,7 +617,7 @@ public class GetReportSample {
             
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
-        }
+        }*/
         
         
        
